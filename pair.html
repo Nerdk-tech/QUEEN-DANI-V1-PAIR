@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QUEEN DANI V1 PAIR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Background Gradient Animation */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1f4037, #99f2c8);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 34px;
+      color: #00ffcc;
+      text-shadow: 0 0 15px #00ffcc, 0 0 25px #00ffaa;
+      margin-bottom: 20px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    /* Features Section */
+    .features {
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      max-width: 500px;
+      border: 1px solid #00ffaa;
+      box-shadow: 0 0 15px #00ffaa;
+    }
+    .features h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      color: #ffdd00;
+      text-shadow: 0 0 8px #ffdd00;
+    }
+    .features ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: left;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    .features ul li::before {
+      content: "⚡ ";
+      color: #00ffcc;
+    }
+
+    /* Input Glow Effect */
+    input {
+      padding: 15px;
+      font-size: 18px;
+      width: 100%;
+      max-width: 420px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      text-align: center;
+      margin-bottom: 15px;
+      background: #111;
+      color: #fff;
+      box-shadow: 0 0 15px #00ffaa, 0 0 25px #00ffcc;
+      animation: glowInput 2s infinite alternate;
+    }
+    @keyframes glowInput {
+      from { box-shadow: 0 0 10px #00ffaa; }
+      to { box-shadow: 0 0 25px #00ffcc; }
+    }
+
+    /* Button */
+    button {
+      padding: 14px;
+      font-size: 18px;
+      width: 100%;
+      max-width: 420px;
+      border-radius: 10px;
+      border: none;
+      background: #00ffaa;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s ease;
+      box-shadow: 0 0 10px #00ffaa;
+    }
+    button:hover {
+      transform: scale(1.05);
+      background: #00cc88;
+      box-shadow: 0 0 20px #00ffaa;
+    }
+
+    /* Result Box */
+    .output {
+      margin-top: 25px;
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      border: 1px solid #00ffaa;
+      box-shadow: 0 0 10px #00ffaa;
+      max-width: 500px;
+      word-break: break-all;
+      display: none;
+      font-size: 18px;
+    }
+
+    /* Copy Button */
+    .copy-btn {
+      margin-top: 10px;
+      background: #ffdd00;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ffdd00;
+      display: none;
+    }
+    .copy-btn:hover {
+      background: #ffaa00;
+      box-shadow: 0 0 20px #ffaa00;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>👑 QUEEN DANI V1 PAIR 👑</h1>
+
+  <div class="features">
+    <h2>🔥 Updated Features</h2>
+    <ul>
+      <li>Updated AI system</li>
+      <li>Fast Pair Code generation</li>
+      <li>Secure and reliable connection</li>
+      <li>Added new features</li>
+      <li>Clean & modern interface</li>
+      <li>Deploy free bot now</li>
+    </ul>
+  </div>
+
+  <input type="text" id="number" placeholder="Enter WhatsApp Number (e.g., 234123456789)" />
+  <button onclick="getCode()">⚡ Generate Pair Code</button>
+
+  <div id="result" class="output"></div>
+  <button id="copyBtn" class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
+
+  <script>
+    async function getCode() {
+      const number = document.getElementById("number").value.trim();
+      const resultBox = document.getElementById("result");
+      const copyBtn = document.getElementById("copyBtn");
+
+      if (!number) {
+        alert("Please enter a valid number.");
+        return;
+      }
+
+      resultBox.style.display = 'block';
+      resultBox.textContent = "⏳ Generating pair code, please wait...";
+      copyBtn.style.display = "none";
+
+      try {
+        const res = await fetch(`/code?number=${encodeURIComponent(number)}`);
+        const data = await res.json();
+
+        if (data.code) {
+          resultBox.textContent = `✅ Pair Code: ${data.code}`;
+          copyBtn.style.display = "inline-block";
+        } else if (data.error) {
+          resultBox.textContent = `❌ Error: ${data.error}`;
+        } else {
+          resultBox.textContent = "⚠️ Unknown response received.";
+        }
+      } catch (err) {
+        resultBox.textContent = `❌ Failed to get code: ${err.message}`;
+      }
+    }
+
+    function copyCode() {
+      const resultBox = document.getElementById("result");
+      const text = resultBox.textContent.replace("✅ Pair Code: ", "");
+      navigator.clipboard.writeText(text).then(() => {
+        alert("✅ Pair Code copied to clipboard!");
+      });
+    }
+  </script>
+
+</body>
+</html>
